@@ -1149,8 +1149,9 @@ SECTION_HEADER_RE = re.compile(r"^[A-Z][A-Z\s&]{2,}:?\s*$")
 
 def section_recipe(text: str, title: str) -> dict:
     lines = [l.rstrip() for l in text.splitlines() if l.strip()]
-    # Drop the title line if it's the first non-empty line
-    if lines and title and lines[0].strip() == title.strip():
+    # Drop the title line if it's the first non-empty line (prefix match —
+    # the title arg may be shorter than the full title on the page)
+    if lines and title and lines[0].strip().startswith(title.strip()):
         lines = lines[1:]
 
     description_parts = []
@@ -1187,7 +1188,7 @@ def section_recipe(text: str, title: str) -> dict:
     if servings_match:
         s_min = int(servings_match.group(1))
         s_max = int(servings_match.group(2)) if servings_match.group(2) else s_min
-        servings_str = servings_match.group(0)
+        servings_str = servings_match.group(1)
     else:
         servings_str = None
         s_min = None
