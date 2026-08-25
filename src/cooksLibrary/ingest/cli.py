@@ -36,6 +36,11 @@ def run(args: list[str]) -> int:
     categories = load_categories(settings.categories_file) if Path(settings.categories_file).exists() else []
     books = discover_books(settings.library_path, conn)
 
+    if opts.book and not any(b["slug"] == opts.book for b in books):
+        row = conn.execute("SELECT * FROM books WHERE slug = ?", (opts.book,)).fetchone()
+        if row:
+            books.append(dict(row))
+
     for book in books:
         if opts.book and book["slug"] != opts.book:
             continue
@@ -52,33 +57,40 @@ def _ingest_book(conn, book, categories, settings, threshold, force):
     # Derive category from first 5 pages of text
     early_text = ""
     for p in range(1, min(6, book["page_count"] + 1)):
-        early_text += extract_page(pdf_path, p, cache_dir) + "\n"
+        early_text += extract_page(pdf_path, p, cache_dir, force=force) + "\n"
     folder = Path(pdf_path).parent.name
     if categories:
         book["category"] = categorize_book(book, early_text, Path(pdf_path).name, folder, categories)
     else:
         book["category"] = "Uncategorized"
 
-    # Insert book
+    existing_id = conn.execute(
+        "SELECT id FROM books WHERE slug = ?", (book["slug"],)
+    ).fetchone()
+    book_id = existing_id[0] if existing_id else None
+    if book_id is not None:
+        conn.execute("DELETE FROM bookmarks WHERE recipe_id IN (SELECT id FROM recipes WHERE book_id = ?)", (book_id,))
+        conn.execute("DELETE FROM recipe_ingredients WHERE recipe_id IN (SELECT id FROM recipes WHERE book_id = ?)", (book_id,))
+        conn.execute("DELETE FROM recipes WHERE book_id = ?", (book_id,))
     conn.execute("""
-        INSERT INTO books (slug, title, author, category, source_path, source_hash,
+        INSERT OR REPLACE INTO books (id, slug, title, author, category, source_path, source_hash,
                           page_count, pdf_version, ingest_method, outline_present)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (book["slug"], book["title"], book["author"], book["category"],
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (book_id, book["slug"], book["title"], book["author"], book["category"],
           book["source_path"], book["source_hash"], book["page_count"],
           book["pdf_version"], "outline" if book["outline_present"] else "page-walk",
           int(book["outline_present"])))
     book_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
 
     # Detect recipes
-    recipes = detect_recipes(pdf_path, cache_dir, book["outline_present"])
+    recipes = detect_recipes(pdf_path, cache_dir, book["outline_present"], force=force)
     for rec in recipes:
         text = ""
         if rec["page_end"] and rec["page_end"] > rec["page_start"]:
             from .pdf_text import extract_pages
-            text = extract_pages(pdf_path, rec["page_start"] + 1, rec["page_end"] + 1, cache_dir)
+            text = extract_pages(pdf_path, rec["page_start"], rec["page_end"], cache_dir, force=force)
         else:
-            text = extract_page(pdf_path, rec["page_start"] + 1, cache_dir)
+            text = extract_page(pdf_path, rec["page_start"], cache_dir, force=force)
         sectioned = section_recipe(text, rec["title"])
         score, notes = score_recipe({**sectioned, "title": rec["title"]})
         needs_review = 1 if score < threshold else 0
@@ -88,8 +100,8 @@ def _ingest_book(conn, book, categories, settings, threshold, force):
                                 servings, servings_min, servings_max, instructions,
                                 confidence, needs_review, render_method, extraction_notes)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (book_id, rec["title"], rec["page_start"] + 1,
-              (rec["page_end"] + 1) if rec["page_end"] else None,
+        """, (book_id, rec["title"], rec["page_start"],
+              rec["page_end"] if rec["page_end"] else None,
               sectioned["description"], sectioned["servings"],
               sectioned["servings_min"], sectioned["servings_max"],
               sectioned["instructions"], score, needs_review, render_method, notes))

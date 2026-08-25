@@ -16,7 +16,7 @@ def test_detect_from_outline(tmp_data_dir):
     assert len(recipes) > 10
     titles = [r["title"] for r in recipes]
     assert any("Waffles" in t for t in titles)
-    assert all(r["page_start"] >= 0 for r in recipes)
+    assert all(r["page_start"] >= 1 for r in recipes)
 
 def test_filter_stops_non_recipe_entries():
     entries = [
@@ -43,7 +43,7 @@ def test_page_walk_assigns_correct_titles(tmp_data_dir):
         4: "Second Recipe\nServes 6\nMore instructions.",
         5: "Third Recipe\nMAKES 8\nFinal instructions.",
     }
-    def fake_extract_page(pdf_path, page, cache_dir):
+    def fake_extract_page(pdf_path, page, cache_dir, **kwargs):
         return pages.get(page, "")
     class FakeReader:
         @property

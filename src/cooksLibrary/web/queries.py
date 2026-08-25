@@ -49,8 +49,11 @@ def search_recipes(query: str, limit: int = 20, offset: int = 0) -> list[dict]:
         JOIN books b ON b.id = r.book_id
         WHERE recipes_fts MATCH ?
         LIMIT ? OFFSET ?
-    """, (query, limit, offset)).fetchall()
+    """, (_sanitize_fts_query(query), limit, offset)).fetchall()
     return [dict(r) for r in rows]
+
+def _sanitize_fts_query(q: str) -> str:
+    return '"' + q.replace('"', '""') + '"'
 
 def get_bookmarks() -> list[dict]:
     conn = get_db()

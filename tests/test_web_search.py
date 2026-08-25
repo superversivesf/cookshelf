@@ -28,3 +28,7 @@ def test_search_returns_results(client):
 def test_search_empty_query(client):
     r = client.get("/search", params={"q": ""})
     assert r.status_code == 200
+
+def test_search_special_characters(client):
+    r = client.get("/search", params={"q": "chocolate (cake"})
+    assert r.status_code == 200
