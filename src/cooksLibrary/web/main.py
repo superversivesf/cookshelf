@@ -6,6 +6,8 @@ from .routes.books import router as books_router
 from .routes.recipes import router as recipes_router
 from .routes.search import router as search_router
 from .routes.ingredients import router as ingredients_router
+from .routes.bookmarks import router as bookmarks_router
+from .routes.pages import router as pages_router
 
 
 def create_app() -> FastAPI:
@@ -26,6 +28,8 @@ def create_app() -> FastAPI:
     app.include_router(recipes_router)
     app.include_router(search_router)
     app.include_router(ingredients_router)
+    app.include_router(bookmarks_router)
+    app.include_router(pages_router)
     return app
 
 
