@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Cook's Library{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/app.css">
+    <script src="https://unpkg.com/htmx.org@1.9"></script>
+</head>
+<body class="bg-stone-50 min-h-screen">
+    <nav class="bg-stone-800 text-stone-100 p-4">
+        <a href="/" class="font-bold text-lg">Cook's Library</a>
+        <a href="/books" class="ml-4">Books</a>
+        <a href="/search" class="ml-4">Search</a>
+        <a href="/ingredients" class="ml-4">Ingredients</a>
+        <a href="/bookmarks" class="ml-4">Bookmarks</a>
+    </nav>
+    <main class="max-w-5xl mx-auto p-4">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
