@@ -23,6 +23,7 @@ def test_filter_stops_non_recipe_entries():
         ("Cover", 0), ("Title", 2), ("Copyright", 3), ("Contents", 4),
         ("FOREWORD", 6), ("Waffles and Eggs", 13), ("How to Feed an Army", 17),
         ("INDEX", 217), ("Credits", 223),
+        ("A", 217), ("B", 217), ("E", 219), ("Z", 222),
     ]
     filtered = filter_outline_entries(entries)
     titles = [e[0] for e in filtered]
@@ -30,6 +31,9 @@ def test_filter_stops_non_recipe_entries():
     assert "Cover" not in titles
     assert "INDEX" not in titles
     assert "How to Feed an Army" not in titles  # "How to" sidebar
+    assert "A" not in titles  # single-letter index headings
+    assert "B" not in titles
+    assert "Z" not in titles
 
 def test_page_walk_assigns_correct_titles(tmp_data_dir):
     pages = {

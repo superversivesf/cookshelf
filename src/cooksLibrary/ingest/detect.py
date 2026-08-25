@@ -13,7 +13,8 @@ STOPLIST_RE = re.compile(
 SERVES_RE = re.compile(r"(?:SERVES|Serves|serves|MAKES|Makes)\s+(\d+)(?:\s*(?:to|-|\u2013)\s*(\d+))?",)
 
 def filter_outline_entries(entries: list[tuple[str, int]]) -> list[tuple[str, int]]:
-    return [(t, p) for t, p in entries if not STOPLIST_RE.match(t.strip())]
+    return [(t, p) for t, p in entries
+            if not STOPLIST_RE.match(t.strip()) and len(t.strip()) >= 2]
 
 def _flatten_outline(reader: pypdf.PdfReader) -> list[tuple[str, int]]:
     result = []
