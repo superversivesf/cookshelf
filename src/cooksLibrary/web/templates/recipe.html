@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ recipe.title }} - Cook's Library{% endblock %}
+{% block content %}
+<a href="/books/{{ book.slug }}" class="text-stone-500">&larr; {{ book.title }}</a>
+<div class="flex items-start justify-between mt-2 mb-4">
+    <div>
+        <h1 class="text-3xl font-bold">{{ recipe.title }}</h1>
+        <p class="text-stone-500">{{ book.title }} · p.{{ recipe.page_start }} · Serves {{ recipe.servings }}</p>
+    </div>
+    {% include "partials/bookmark_button.html" %}
+</div>
+{% if recipe.description %}
+<p class="text-stone-600 mb-6">{{ recipe.description }}</p>
+{% endif %}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div>
+        <h2 class="text-xl font-bold mb-3">Ingredients</h2>
+        {% set sections = {} %}
+        {% for ing in recipe.ingredients %}
+            {% set _ = sections.update({ing.section: sections.get(ing.section, []) + [ing]}) %}
+        {% endfor %}
+        {% for section, ings in sections.items() %}
+            {% if section %}<h3 class="font-semibold mt-4 mb-2">{{ section }}</h3>{% endif %}
+            <ul class="space-y-1">
+                {% for ing in ings %}
+                <li>{{ ing.raw_text }}</li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </div>
+    <div>
+        <h2 class="text-xl font-bold mb-3">Instructions</h2>
+        <p class="whitespace-pre-line">{{ recipe.instructions }}</p>
+    </div>
+</div>
+<p class="mt-8">
+    <a href="/books/{{ book.slug }}/page/{{ recipe.page_start }}" target="_blank"
+       class="text-blue-600 hover:underline">View original PDF page</a>
+</p>
+{% endblock %}

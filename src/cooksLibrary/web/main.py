@@ -3,6 +3,8 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from .routes.books import router as books_router
+from .routes.recipes import router as recipes_router
+
 
 def create_app() -> FastAPI:
     app = FastAPI(title="Cook's Library")
@@ -19,6 +21,8 @@ def create_app() -> FastAPI:
         return templates.TemplateResponse(request, "home.html")
 
     app.include_router(books_router)
+    app.include_router(recipes_router)
     return app
+
 
 app = create_app()

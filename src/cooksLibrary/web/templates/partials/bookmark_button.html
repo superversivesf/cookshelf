@@ -1,0 +1,5 @@
+<button hx-post="/bookmarks" hx-vals='{"recipe_id": {{ recipe.id }}}'
+        hx-swap="outerHTML"
+        class="px-4 py-2 rounded {{ 'bg-red-500 text-white' if bookmarked else 'bg-stone-200' }}">
+    {{ 'Bookmarked' if bookmarked else 'Bookmark' }}
+</button>
