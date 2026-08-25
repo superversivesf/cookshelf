@@ -835,11 +835,11 @@ Expected: FAIL with `ModuleNotFoundError`
 import re
 
 # Unicode-aware fraction characters
-FRACTION = r"(?:\d+\s+\d+/\d+|\d+/\d+|\d+(?:\.\d+)?|[½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞])"
+FRACTION = r"(?:\d+\s+\d+/\d+|\d+\s+[½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]|\d+/\d+|\d+(?:\.\d+)?|[½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞])"
 
 UNITS = (
     r"cups?|tbsp|tablespoons?|tsp|teaspoons?|oz|ounces?|lb|lbs|pounds?|"
-    r"kg|g|ml|l|liters?|cans?|packages?|cloves?|sticks?|sprigs?|"
+    r"kg|g\b|ml|l\b|liters?|cans?|packages?|cloves?|sticks?|sprigs?|"
     r"bunches?|pinches?|slices?|pieces?"
 )
 
