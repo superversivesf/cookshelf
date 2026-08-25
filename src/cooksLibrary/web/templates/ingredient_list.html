@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Ingredients - Cook's Library{% endblock %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Ingredients</h1>
+<ul class="columns-3 gap-4">
+    {% for ing in ingredients %}
+    <li><a href="/ingredients/{{ ing.ingredient_name }}"
+           class="text-blue-600 hover:underline">{{ ing.display_name }}</a>
+        <span class="text-stone-400 text-sm">({{ ing.recipe_count }})</span>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
