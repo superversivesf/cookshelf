@@ -2,6 +2,7 @@ from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from .routes.books import router as books_router
 
 def create_app() -> FastAPI:
     app = FastAPI(title="Cook's Library")
@@ -17,7 +18,7 @@ def create_app() -> FastAPI:
     def home(request: Request):
         return templates.TemplateResponse(request, "home.html")
 
-    # Routes will be added in later tasks via includes
+    app.include_router(books_router)
     return app
 
 app = create_app()
