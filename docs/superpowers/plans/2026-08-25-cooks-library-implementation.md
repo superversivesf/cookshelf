@@ -995,21 +995,22 @@ def _detect_page_walk(pdf_path: str, cache_dir: Path) -> list[dict]:
     total_pages = len(reader.pages)
     recipes = []
     current_start = None
+    current_title = None
     for p in range(1, total_pages + 1):
         text = extract_page(pdf_path, p, cache_dir)
         is_recipe_start = _is_recipe_start(text)
-        if is_recipe_start and current_start is None:
+        if is_recipe_start:
+            if current_start is not None:
+                recipes.append({
+                    "title": current_title,
+                    "page_start": current_start, "page_end": p - 1,
+                    "ingest_method": "page-walk"
+                })
             current_start = p
-        elif is_recipe_start and current_start is not None:
-            recipes.append({
-                "title": _extract_title(text),
-                "page_start": current_start, "page_end": p - 1,
-                "ingest_method": "page-walk"
-            })
-            current_start = p
+            current_title = _extract_title(text)
     if current_start is not None:
         recipes.append({
-            "title": "", "page_start": current_start, "page_end": total_pages,
+            "title": current_title, "page_start": current_start, "page_end": total_pages,
             "ingest_method": "page-walk"
         })
     return recipes
