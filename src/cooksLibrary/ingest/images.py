@@ -21,10 +21,13 @@ def render_page(pdf_path: str, book_slug: str, page: int, data_dir: Path) -> Pat
              pdf_path, tmp_png.rsplit(".", 1)[0]],
             check=True, capture_output=True
         )
-        # pdftoppm appends page number to the prefix
-        generated = f"{tmp_png.rsplit('.', 1)[0]}-{page:04d}.png"
-        if not Path(generated).exists():
-            generated = f"{tmp_png.rsplit('.', 1)[0]}-{page}.png"
+        # pdftoppm writes {prefix}-{page:0Nd}.png where N depends on page count;
+        # glob for the single generated page to avoid padding mismatches.
+        candidates = sorted(Path(tmp_png).parent.glob(
+            f"{Path(tmp_png).stem.rsplit('.', 1)[0]}-*.png"))
+        generated = str(candidates[0]) if candidates else None
+        if not generated:
+            return None
         subprocess.run(["cwebp", "-quiet", generated, "-o", str(out_path)],
                        check=True, capture_output=True)
         Path(generated).unlink(missing_ok=True)
