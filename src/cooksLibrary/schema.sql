@@ -61,6 +61,5 @@ CREATE TABLE IF NOT EXISTS bookmarks (
 );
 
 CREATE VIRTUAL TABLE IF NOT EXISTS recipes_fts USING fts5(
-    title, description, instructions, ingredient_names,
-    content='recipes', content_rowid='id'
+    title, description, instructions, ingredient_names
 );
