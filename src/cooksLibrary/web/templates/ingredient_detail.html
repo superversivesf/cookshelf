@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{ ingredient_name }} - Cook's Library{% endblock %}
+{% block content %}
+<a href="/ingredients" class="text-stone-500">&larr; All Ingredients</a>
+<h1 class="text-3xl font-bold mt-2 mb-6 capitalize">{{ ingredient_name }}</h1>
+<p class="text-stone-500 mb-4">{{ recipes|length }} recipes</p>
+<ul class="space-y-2">
+    {% for r in recipes %}
+    <li>
+        <a href="/recipes/{{ r.id }}" class="text-blue-600 hover:underline">{{ r.title }}</a>
+        <span class="text-stone-400 text-sm">{{ r.book_title }} · p.{{ r.page_start }}</span>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

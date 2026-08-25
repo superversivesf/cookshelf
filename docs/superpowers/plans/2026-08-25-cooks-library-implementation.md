@@ -209,7 +209,7 @@ pytest>=9.0
 ```toml
 [build-system]
 requires = ["setuptools>=68"]
-build-backend = "setuptools.backends._legacy:_Backend"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "cooks-library"
@@ -342,8 +342,7 @@ CREATE TABLE IF NOT EXISTS bookmarks (
 );
 
 CREATE VIRTUAL TABLE IF NOT EXISTS recipes_fts USING fts5(
-    title, description, instructions, ingredient_names,
-    content='recipes', content_rowid='id'
+    title, description, instructions, ingredient_names
 );
 ```
 
@@ -835,11 +834,11 @@ Expected: FAIL with `ModuleNotFoundError`
 import re
 
 # Unicode-aware fraction characters
-FRACTION = r"(?:\d+\s+\d+/\d+|\d+/\d+|\d+(?:\.\d+)?|[½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞])"
+FRACTION = r"(?:\d+\s+\d+/\d+|\d+\s+[½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]|\d+/\d+|\d+(?:\.\d+)?|[½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞])"
 
 UNITS = (
     r"cups?|tbsp|tablespoons?|tsp|teaspoons?|oz|ounces?|lb|lbs|pounds?|"
-    r"kg|g|ml|l|liters?|cans?|packages?|cloves?|sticks?|sprigs?|"
+    r"kg|g\b|ml|l\b|liters?|cans?|packages?|cloves?|sticks?|sprigs?|"
     r"bunches?|pinches?|slices?|pieces?"
 )
 
@@ -959,7 +958,8 @@ STOPLIST_RE = re.compile(
 SERVES_RE = re.compile(r"(?:SERVES|Serves|serves|MAKES|Makes)\s+(\d+)(?:\s*(?:to|-|\u2013)\s*(\d+))?",)
 
 def filter_outline_entries(entries: list[tuple[str, int]]) -> list[tuple[str, int]]:
-    return [(t, p) for t, p in entries if not STOPLIST_RE.match(t.strip())]
+    return [(t, p) for t, p in entries
+            if not STOPLIST_RE.match(t.strip()) and len(t.strip()) >= 2]
 
 def _flatten_outline(reader: pypdf.PdfReader) -> list[tuple[str, int]]:
     result = []
@@ -995,21 +995,22 @@ def _detect_page_walk(pdf_path: str, cache_dir: Path) -> list[dict]:
     total_pages = len(reader.pages)
     recipes = []
     current_start = None
+    current_title = None
     for p in range(1, total_pages + 1):
         text = extract_page(pdf_path, p, cache_dir)
         is_recipe_start = _is_recipe_start(text)
-        if is_recipe_start and current_start is None:
+        if is_recipe_start:
+            if current_start is not None:
+                recipes.append({
+                    "title": current_title,
+                    "page_start": current_start, "page_end": p - 1,
+                    "ingest_method": "page-walk"
+                })
             current_start = p
-        elif is_recipe_start and current_start is not None:
-            recipes.append({
-                "title": _extract_title(text),
-                "page_start": current_start, "page_end": p - 1,
-                "ingest_method": "page-walk"
-            })
-            current_start = p
+            current_title = _extract_title(text)
     if current_start is not None:
         recipes.append({
-            "title": "", "page_start": current_start, "page_end": total_pages,
+            "title": current_title, "page_start": current_start, "page_end": total_pages,
             "ingest_method": "page-walk"
         })
     return recipes
@@ -1148,8 +1149,9 @@ SECTION_HEADER_RE = re.compile(r"^[A-Z][A-Z\s&]{2,}:?\s*$")
 
 def section_recipe(text: str, title: str) -> dict:
     lines = [l.rstrip() for l in text.splitlines() if l.strip()]
-    # Drop the title line if it's the first non-empty line
-    if lines and title and lines[0].strip() == title.strip():
+    # Drop the title line if it's the first non-empty line (prefix match —
+    # the title arg may be shorter than the full title on the page)
+    if lines and title and lines[0].strip().startswith(title.strip()):
         lines = lines[1:]
 
     description_parts = []
@@ -1186,7 +1188,7 @@ def section_recipe(text: str, title: str) -> dict:
     if servings_match:
         s_min = int(servings_match.group(1))
         s_max = int(servings_match.group(2)) if servings_match.group(2) else s_min
-        servings_str = servings_match.group(0)
+        servings_str = servings_match.group(1)
     else:
         servings_str = None
         s_min = None

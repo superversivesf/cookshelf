@@ -1,0 +1,22 @@
+categories:
+  - name: Instant Pot & Pressure Cooking
+    keywords: [instant pot, pressure cooker, electric pressure]
+    weight: 10
+  - name: Desserts & Baking
+    keywords: [dessert, cake, cookie, baking, pastry, pie, tart, sweet, cheesecake, brownie]
+    weight: 5
+  - name: Cocktails & Drinks
+    keywords: [cocktail, martini, drink, spirits, bourbon, whiskey, margarita, mocktail]
+    weight: 10
+  - name: Vegetables & Vegetarian
+    keywords: [vegetable, vegetarian, vegan, "fresh & green", produce]
+    weight: 5
+  - name: Pasta & Italian
+    keywords: [pasta, italian, risotto, lasagna, bolognese]
+    weight: 5
+  - name: Breakfast
+    keywords: [breakfast, brunch, waffle, pancake, oatmeal]
+    weight: 5
+  - name: Soups & Stews
+    keywords: [soup, stew, chili, broth, chowder]
+    weight: 5

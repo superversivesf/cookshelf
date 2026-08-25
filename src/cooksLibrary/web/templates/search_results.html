@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Search - Cook's Library{% endblock %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Search</h1>
+<form action="/search" method="get" class="mb-6">
+    <input type="text" name="q" value="{{ query }}"
+           class="w-full p-3 rounded border border-stone-300" placeholder="Search recipes...">
+</form>
+{% if query %}
+<p class="text-stone-500 mb-4">{{ results|length }} results for "{{ query }}"</p>
+<ul class="space-y-3">
+    {% for r in results %}
+    <li class="p-4 bg-white rounded shadow">
+        <a href="/recipes/{{ r.id }}" class="font-semibold text-blue-600 hover:underline">{{ r.title }}</a>
+        <p class="text-sm text-stone-500">{{ r.book_title }} · p.{{ r.page_start }}</p>
+        <p class="text-sm mt-1">{{ r.snippet | safe }}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

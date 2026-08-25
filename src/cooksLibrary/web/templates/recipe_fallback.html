@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ recipe.title }} - Cook's Library{% endblock %}
+{% block content %}
+<a href="/books/{{ book.slug }}" class="text-stone-500">&larr; {{ book.title }}</a>
+<div class="flex items-start justify-between mt-2 mb-4">
+    <div>
+        <h1 class="text-3xl font-bold">{{ recipe.title }}</h1>
+        <p class="text-stone-500">{{ book.title }} · p.{{ recipe.page_start }}</p>
+    </div>
+    {% include "partials/bookmark_button.html" %}
+</div>
+<div class="bg-yellow-50 border border-yellow-200 p-4 rounded mb-6">
+    <p class="text-sm text-stone-600">This recipe couldn't be fully parsed. Showing the original page.</p>
+</div>
+{% if recipe.page_end and recipe.page_end > recipe.page_start %}
+    {% for p in range(recipe.page_start, recipe.page_end + 1) %}
+    <img src="/books/{{ book.slug }}/page/{{ p }}" alt="Page {{ p }}" class="w-full mb-4 shadow rounded">
+    {% endfor %}
+{% else %}
+<img src="/books/{{ book.slug }}/page/{{ recipe.page_start }}" alt="Page {{ recipe.page_start }}"
+     class="w-full shadow rounded">
+{% endif %}
+{% endblock %}

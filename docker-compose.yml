@@ -1,0 +1,21 @@
+services:
+  cooks-library:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - /mnt/media/Komga/Cooking:/library/existing:ro
+      - ./incoming:/library/incoming
+      - cooks-data:/data
+    environment:
+      COOKS_LIBRARY_PATH: /library/existing:/library/incoming
+      COOKS_DB_PATH: /data/cooks.db
+      COOKS_DATA_DIR: /data
+      COOKS_CONFIDENCE_THRESHOLD: "0.6"
+      COOKS_CATEGORIES_FILE: /data/categories.yml
+      # COOKS_LLM_MODEL: glm-5.2
+      # COOKS_LLM_API_KEY: set-me
+    restart: unless-stopped
+
+volumes:
+  cooks-data:

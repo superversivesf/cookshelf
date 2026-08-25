@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Bookmarks - Cook's Library{% endblock %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Bookmarks</h1>
+{% if not bookmarks %}
+<p class="text-stone-500">No bookmarks yet.</p>
+{% endif %}
+<ul class="space-y-2">
+    {% for bm in bookmarks %}
+    <li class="p-4 bg-white rounded shadow">
+        <a href="/recipes/{{ bm.id }}" class="font-semibold text-blue-600 hover:underline">{{ bm.title }}</a>
+        <p class="text-sm text-stone-500">{{ bm.book_title }} · p.{{ bm.page_start }} · {{ bm.created_at }}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

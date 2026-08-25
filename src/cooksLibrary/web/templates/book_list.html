@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Books - Cook's Library{% endblock %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Books</h1>
+{% for category, books in by_category.items() %}
+<section class="mb-8">
+    <h2 class="text-xl font-bold mb-3 text-stone-700">{{ category }}</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {% for book in books %}
+        <a href="/books/{{ book.slug }}" class="p-4 bg-white rounded shadow hover:shadow-md">
+            <h3 class="font-semibold">{{ book.title }}</h3>
+            {% if book.author %}<p class="text-sm text-stone-500">{{ book.author }}</p>{% endif %}
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endfor %}
+{% endblock %}
