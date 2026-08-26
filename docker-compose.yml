@@ -2,7 +2,7 @@ services:
   cooks-library:
     build: .
     ports:
-      - "8000:8000"
+      - "8765:8000"
     volumes:
       - /mnt/media/Komga/Cooking:/library/existing:ro
       - ./incoming:/library/incoming

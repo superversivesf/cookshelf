@@ -96,7 +96,7 @@ def _ingest_book(conn, book, categories, settings, threshold, force):
         needs_review = 1 if score < threshold else 0
         render_method = "pdf_fallback" if needs_review else "structured"
         conn.execute("""
-            INSERT INTO recipes (book_id, title, page_start, page_end, description,
+            INSERT OR IGNORE INTO recipes (book_id, title, page_start, page_end, description,
                                 servings, servings_min, servings_max, instructions,
                                 confidence, needs_review, render_method, extraction_notes)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
