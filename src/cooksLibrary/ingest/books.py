@@ -5,6 +5,9 @@ from pathlib import Path
 import pypdf
 import wordsegment
 from .pdf_info import extract_info
+from .ebook_text import extract_ebook_info
+
+EBOOK_EXTENSIONS = {".mobi", ".epub", ".azw", ".azw3"}
 
 wordsegment.load()
 
@@ -24,9 +27,9 @@ def prettify_filename(filename: str) -> str:
             pieces.append(piece)
     return " ".join(w.capitalize() for w in pieces)
 
-def compute_hash(pdf_path: str) -> str:
+def compute_hash(file_path: str) -> str:
     h = hashlib.sha256()
-    with open(pdf_path, "rb") as f:
+    with open(file_path, "rb") as f:
         for chunk in iter(lambda: f.read(65536), b""):
             h.update(chunk)
     return h.hexdigest()
@@ -34,22 +37,35 @@ def compute_hash(pdf_path: str) -> str:
 def discover_books(library_paths: list[str], conn: sqlite3.Connection) -> list[dict]:
     books = []
     for lib_path in library_paths:
-        for pdf_path in sorted(Path(lib_path).rglob("*.pdf")):
-            source_hash = compute_hash(str(pdf_path))
+        lib = Path(lib_path)
+        files = sorted(list(lib.rglob("*.pdf")) +
+                       [p for p in lib.rglob("*") if p.suffix.lower() in EBOOK_EXTENSIONS])
+        for file_path in files:
+            source_hash = compute_hash(str(file_path))
             existing = conn.execute(
                 "SELECT id FROM books WHERE source_hash = ?", (source_hash,)
             ).fetchone()
             if existing:
                 continue
-            info = extract_info(str(pdf_path))
-            title = info["title"] or prettify_filename(pdf_path.name)
+            is_ebook = file_path.suffix.lower() in EBOOK_EXTENSIONS
+            try:
+                if is_ebook:
+                    info = extract_ebook_info(str(file_path))
+                    outline_present = False
+                else:
+                    info = extract_info(str(file_path))
+                    outline_present = _has_outline(str(file_path))
+            except Exception:
+                print(f"  Skipping {file_path.name}: extraction failed")
+                continue
+            title = info["title"] or prettify_filename(file_path.name)
             slug = make_slug(title)
-            outline_present = _has_outline(str(pdf_path))
             books.append({
                 "slug": slug, "title": title, "author": info["author"],
-                "source_path": str(pdf_path), "source_hash": source_hash,
+                "source_path": str(file_path), "source_hash": source_hash,
                 "page_count": info["page_count"], "pdf_version": info["pdf_version"],
                 "outline_present": outline_present,
+                "is_ebook": is_ebook,
             })
     return books
 
