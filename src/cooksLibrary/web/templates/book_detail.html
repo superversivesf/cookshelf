@@ -2,9 +2,16 @@
 {% block title %}{{ book.title }} - Cook's Library{% endblock %}
 {% block content %}
 <a href="/books" class="text-muted text-decoration-none">&larr; All Books</a>
-<h1 class="mt-2 mb-2">{{ book.title }}</h1>
-{% if book.author %}<p class="text-muted">{{ book.author }}</p>{% endif %}
-<p class="text-muted mb-4">Category: {{ book.category }} · {{ book.page_count }} pages</p>
+<div class="row mt-2 mb-4 g-3">
+    <div class="col-6 col-md-3 col-lg-2">
+        <img src="/books/{{ book.slug }}/page/1" alt="{{ book.title }}" class="img-fluid rounded shadow-sm">
+    </div>
+    <div class="col-12 col-md-9 col-lg-10">
+        <h1>{{ book.title }}</h1>
+        {% if book.author %}<p class="text-muted">{{ book.author }}</p>{% endif %}
+        <p class="text-muted">Category: {{ book.category }} · {{ book.page_count }} pages</p>
+    </div>
+</div>
 <h2 class="h4 mb-3">Recipes</h2>
 <ul class="list-group">
     {% for r in recipes %}
