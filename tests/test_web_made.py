@@ -1,13 +1,13 @@
 import pytest
 from fastapi.testclient import TestClient
-from cooksLibrary.web.queries import get_db, toggle_made, is_made, get_made_recipes
+from cooksLibrary.web.queries import get_db, _clear_db_cache, toggle_made, is_made, get_made_recipes
 from cooksLibrary.web.main import create_app
 from cooksLibrary.db import connect, migrate
 
 
 @pytest.fixture
 def db_conn(tmp_data_dir, monkeypatch):
-    get_db.cache_clear()
+    _clear_db_cache()
     db_path = str(tmp_data_dir / "test.db")
     monkeypatch.setenv("COOKS_DB_PATH", db_path)
     monkeypatch.setenv("COOKS_DATA_DIR", str(tmp_data_dir))
@@ -46,7 +46,7 @@ def test_get_made_recipes_ordered_by_date(db_conn):
 
 @pytest.fixture
 def client(tmp_data_dir, monkeypatch):
-    get_db.cache_clear()
+    _clear_db_cache()
     db_path = str(tmp_data_dir / "test.db")
     monkeypatch.setenv("COOKS_DB_PATH", db_path)
     monkeypatch.setenv("COOKS_DATA_DIR", str(tmp_data_dir))

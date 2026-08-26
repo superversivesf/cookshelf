@@ -1,13 +1,13 @@
 import pytest
 from fastapi.testclient import TestClient
 from cooksLibrary.web.main import create_app
-from cooksLibrary.web.queries import get_db
+from cooksLibrary.web.queries import get_db, _clear_db_cache
 from cooksLibrary.db import connect, migrate
 from cooksLibrary.ingest.index import rebuild_fts
 
 @pytest.fixture
 def client(tmp_data_dir, monkeypatch):
-    get_db.cache_clear()
+    _clear_db_cache()
     db_path = str(tmp_data_dir / "test.db")
     monkeypatch.setenv("COOKS_DB_PATH", db_path)
     monkeypatch.setenv("COOKS_DATA_DIR", str(tmp_data_dir))

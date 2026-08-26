@@ -1,14 +1,22 @@
 import sqlite3
-from functools import lru_cache
+import threading
 from ..config import get_settings
 from ..db import connect, migrate
 
-@lru_cache(maxsize=1)
+_thread_local = threading.local()
+
 def get_db() -> sqlite3.Connection:
-    settings = get_settings()
-    conn = connect(settings.db_path)
-    migrate(conn)
-    return conn
+    if not hasattr(_thread_local, "conn"):
+        settings = get_settings()
+        conn = connect(settings.db_path)
+        migrate(conn)
+        _thread_local.conn = conn
+    return _thread_local.conn
+
+def _clear_db_cache():
+    if hasattr(_thread_local, "conn"):
+        _thread_local.conn.close()
+        del _thread_local.conn
 
 def get_books_by_category() -> list[dict]:
     conn = get_db()
