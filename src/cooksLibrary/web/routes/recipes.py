@@ -23,6 +23,7 @@ def recipe_view(request: Request, recipe_id: int):
         )
         book = dict(book_row) if book_row else None
     bookmarked = queries.is_bookmarked(recipe_id)
+    made = queries.is_made(recipe_id)
     template_name = (
         "recipe_fallback.html"
         if recipe["render_method"] == "pdf_fallback"
@@ -31,5 +32,5 @@ def recipe_view(request: Request, recipe_id: int):
     return templates.TemplateResponse(
         request,
         template_name,
-        {"recipe": recipe, "book": book, "bookmarked": bookmarked},
+        {"recipe": recipe, "book": book, "bookmarked": bookmarked, "made": made},
     )

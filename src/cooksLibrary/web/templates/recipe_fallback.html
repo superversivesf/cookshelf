@@ -1,23 +1,34 @@
 {% extends "base.html" %}
 {% block title %}{{ recipe.title }} - Cook's Library{% endblock %}
 {% block content %}
-<a href="/books/{{ book.slug }}" class="text-stone-500">&larr; {{ book.title }}</a>
-<div class="flex items-start justify-between mt-2 mb-4">
-    <div>
-        <h1 class="text-3xl font-bold">{{ recipe.title }}</h1>
-        <p class="text-stone-500">{{ book.title }} · p.{{ recipe.page_start }}</p>
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+        <a href="/books/{{ book.slug }}" class="text-muted text-decoration-none">&larr; {{ book.title }}</a>
+        <div class="d-flex justify-content-between align-items-start mt-2 mb-3">
+            <div>
+                <h1>{{ recipe.title }}</h1>
+                <p class="text-muted">{{ book.title }} · p.{{ recipe.page_start }}</p>
+            </div>
+            <div class="d-flex gap-2">
+                {% include "partials/bookmark_button.html" %}
+                {% include "partials/made_button.html" %}
+            </div>
+        </div>
+        <div class="alert alert-warning">
+            This recipe couldn't be fully parsed. Showing the original page.
+        </div>
     </div>
-    {% include "partials/bookmark_button.html" %}
 </div>
-<div class="bg-yellow-50 border border-yellow-200 p-4 rounded mb-6">
-    <p class="text-sm text-stone-600">This recipe couldn't be fully parsed. Showing the original page.</p>
+<div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8">
+        {% if recipe.page_end and recipe.page_end > recipe.page_start %}
+            {% for p in range(recipe.page_start, recipe.page_end + 1) %}
+            <img src="/books/{{ book.slug }}/page/{{ p }}" alt="Page {{ p }}" class="img-fluid rounded mb-3 shadow-sm">
+            {% endfor %}
+        {% else %}
+        <img src="/books/{{ book.slug }}/page/{{ recipe.page_start }}" alt="Page {{ recipe.page_start }}"
+             class="img-fluid rounded shadow-sm">
+        {% endif %}
+    </div>
 </div>
-{% if recipe.page_end and recipe.page_end > recipe.page_start %}
-    {% for p in range(recipe.page_start, recipe.page_end + 1) %}
-    <img src="/books/{{ book.slug }}/page/{{ p }}" alt="Page {{ p }}" class="w-full mb-4 shadow rounded">
-    {% endfor %}
-{% else %}
-<img src="/books/{{ book.slug }}/page/{{ recipe.page_start }}" alt="Page {{ recipe.page_start }}"
-     class="w-full shadow rounded">
-{% endif %}
 {% endblock %}
