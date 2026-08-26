@@ -1,0 +1,86 @@
+<h2>What should the recipe detail page look like?</h2>
+<p class="subtitle">This is the main screen you'll use while cooking. It needs to be readable on a phone propped up on the counter.</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">A: Stacked (mobile-first)</div>
+        <div class="mockup-body">
+          <div style="background:white;border-radius:8px;padding:16px;margin-top:8px">
+            <div style="font-size:14px;font-weight:700">Chocolate Cake</div>
+            <div style="font-size:10px;color:#6b7280;margin-top:2px">Desserts & Baking · Serves 8 · p.42</div>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <span style="font-size:9px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:12px">🔖 Saved</span>
+              <span style="font-size:9px;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:12px">✓ Made</span>
+            </div>
+            <div style="font-size:11px;color:#4b5563;margin-top:12px;border-bottom:1px solid #e5e7eb;padding-bottom:8px">A rich, moist chocolate cake with a glossy ganache topping.</div>
+            <div style="font-weight:600;font-size:12px;margin-top:12px;margin-bottom:6px">Ingredients</div>
+            <div style="font-size:10px;color:#374151;line-height:1.8">
+              □ 2 cups all-purpose flour<br>
+              □ 1¾ cups granulated sugar<br>
+              □ ¾ cup cocoa powder<br>
+              □ 2 eggs, at room temperature<br>
+              □ 1 cup buttermilk
+            </div>
+            <div style="font-weight:600;font-size:12px;margin-top:12px;margin-bottom:6px">Instructions</div>
+            <div style="font-size:10px;color:#374151;line-height:1.6">
+              1. Preheat oven to 350°F. Grease two 9-inch round cake pans.<br>
+              2. In a large bowl, whisk together flour, sugar, and cocoa.<br>
+              3. Add eggs, buttermilk, and vanilla. Beat on medium for 2 min.
+            </div>
+          </div>
+          <div style="font-size:10px;color:#6b7280;margin-top:12px">Everything stacks vertically. Ingredients have checkable checkboxes. Same layout on phone and desktop — just wider text on desktop.</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Single Column (Stacked)</h3>
+      <p>Ingredients above instructions, everything stacked. Checkable ingredient boxes. Simple, works great on phone. Desktop gets more whitespace but same flow.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">B: Side-by-side (desktop) → stacked (mobile)</div>
+        <div class="mockup-body">
+          <div style="background:white;border-radius:8px;padding:16px;margin-top:8px">
+            <div style="font-size:14px;font-weight:700">Chocolate Cake</div>
+            <div style="font-size:10px;color:#6b7280;margin-top:2px">Desserts & Baking · Serves 8 · p.42</div>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <span style="font-size:9px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:12px">🔖 Saved</span>
+              <span style="font-size:9px;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:12px">✓ Made</span>
+            </div>
+            <div style="font-size:11px;color:#4b5563;margin-top:12px;border-bottom:1px solid #e5e7eb;padding-bottom:8px">A rich, moist chocolate cake...</div>
+            <div style="display:flex;gap:16px;margin-top:12px">
+              <div style="flex:0 0 40%">
+                <div style="font-weight:600;font-size:12px;margin-bottom:6px">Ingredients</div>
+                <div style="font-size:10px;color:#374151;line-height:1.8">
+                  □ 2 cups flour<br>
+                  □ 1¾ cups sugar<br>
+                  □ ¾ cup cocoa<br>
+                  □ 2 eggs<br>
+                  □ 1 cup buttermilk
+                </div>
+              </div>
+              <div style="flex:1">
+                <div style="font-weight:600;font-size:12px;margin-bottom:6px">Instructions</div>
+                <div style="font-size:10px;color:#374151;line-height:1.6">
+                  1. Preheat oven to 350°F...<br>
+                  2. Whisk dry ingredients...<br>
+                  3. Add wet ingredients and beat...
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:#6b7280;margin-top:12px">Ingredients left, instructions right on desktop. Collapses to stacked on phone via Bootstrap grid (md:col-5 + md:col-7).</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Two Column (Responsive)</h3>
+      <p>Ingredients sidebar + instructions main on desktop. Collapses to stacked on mobile. More efficient use of desktop space, same mobile experience.</p>
+    </div>
+  </div>
+</div>

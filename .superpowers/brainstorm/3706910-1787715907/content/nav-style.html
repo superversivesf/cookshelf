@@ -1,0 +1,72 @@
+<h2>What navigation style for mobile?</h2>
+<p class="subtitle">The nav needs to work on a phone in the kitchen and on desktop. The current nav has 5 inline links that'll be cramped on a phone.</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">A: Bottom nav bar (app-like)</div>
+        <div class="mockup-body">
+          <div style="margin-top:8px">
+            <div style="background:white;border-radius:8px;padding:12px;min-height:120px">
+              <div style="font-size:10px;color:#9ca3af;text-align:center">...recipe content...</div>
+            </div>
+            <div style="position:fixed;bottom:0;left:0;right:0;background:#1c1917;border-radius:0;display:flex;justify-content:space-around;padding:8px 0;margin-top:16px">
+              <div style="text-align:center;color:white;font-size:9px">
+                <div style="font-size:16px">🏠</div>Home
+              </div>
+              <div style="text-align:center;color:#9ca3af;font-size:9px">
+                <div style="font-size:16px">📖</div>Books
+              </div>
+              <div style="text-align:center;color:#9ca3af;font-size:9px">
+                <div style="font-size:16px">🔍</div>Search
+              </div>
+              <div style="text-align:center;color:#9ca3af;font-size:9px">
+                <div style="font-size:16px">🔖</div>Saved
+              </div>
+              <div style="text-align:center;color:#9ca3af;font-size:9px">
+                <div style="font-size:16px">✓</div>Made
+              </div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:#6b7280;margin-top:12px">Fixed bottom bar with icons, always visible. Thumb-friendly on phone. On desktop, same bar appears as a top nav instead.</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Bottom Nav Bar</h3>
+      <p>Fixed bottom bar on mobile (thumb-reachable), converts to top nav on desktop. App-like feel. 5 items max.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">B: Top hamburger menu</div>
+        <div class="mockup-body">
+          <div style="margin-top:8px">
+            <div style="background:#1c1917;color:white;padding:12px;display:flex;justify-content:space-between;align-items:center;border-radius:8px 8px 0 0">
+              <div style="font-weight:700;font-size:12px">Cook's Library</div>
+              <div style="font-size:16px">☰</div>
+            </div>
+            <div style="background:#292524;padding:8px 12px;border-radius:0 0 8px 8px;display:none">
+              <div style="color:#d6d3d1;font-size:10px;padding:4px 0">🏠 Home</div>
+              <div style="color:#d6d3d1;font-size:10px;padding:4px 0">📖 Books</div>
+              <div style="color:#d6d3d1;font-size:10px;padding:4px 0">🔍 Search</div>
+              <div style="color:#d6d3d1;font-size:10px;padding:4px 0">🔖 Saved</div>
+              <div style="color:#d6d3d1;font-size:10px;padding:4px 0">✓ Made</div>
+            </div>
+            <div style="background:white;border-radius:8px;padding:12px;min-height:100px;margin-top:8px">
+              <div style="font-size:10px;color:#9ca3af;text-align:center">...recipe content...</div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:#6b7280;margin-top:12px">Bootstrap navbar with hamburger toggle on mobile. Same bar on desktop but links inline (no hamburger). Standard, familiar web pattern.</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Top Hamburger (Bootstrap)</h3>
+      <p>Standard Bootstrap navbar — hamburger on mobile, inline links on desktop. Familiar, uses Bootstrap's built-in collapse component. Less custom work.</p>
+    </div>
+  </div>
+</div>

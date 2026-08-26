@@ -1,0 +1,77 @@
+<h2>Which layout direction feels right?</h2>
+<p class="subtitle">The app needs to work well on a phone in the kitchen AND on a desktop. Here are two approaches.</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">A: Card-based (Pinterest-style)</div>
+        <div class="mockup-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">
+            <div style="background:#f3f4f6;border-radius:8px;padding:12px;min-height:80px">
+              <div style="font-weight:600;font-size:11px">Chocolate Cake</div>
+              <div style="font-size:9px;color:#6b7280;margin-top:4px">Desserts & Baking · Serves 8</div>
+              <div style="font-size:9px;color:#9ca3af;margin-top:4px">flour, sugar, cocoa...</div>
+            </div>
+            <div style="background:#f3f4f6;border-radius:8px;padding:12px;min-height:80px">
+              <div style="font-weight:600;font-size:11px">Beef Stew</div>
+              <div style="font-size:9px;color:#6b7280;margin-top:4px">Soups & Stews · Serves 6</div>
+              <div style="font-size:9px;color:#9ca3af;margin-top:4px">beef, potatoes, carrots...</div>
+            </div>
+            <div style="background:#f3f4f6;border-radius:8px;padding:12px;min-height:80px">
+              <div style="font-weight:600;font-size:11px">Margherita Pizza</div>
+              <div style="font-size:9px;color:#6b7280;margin-top:4px">Pasta & Italian · Serves 4</div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:#6b7280;margin-top:12px">Recipe cards in a responsive grid. 1 column on phone, 2 on tablet, 3-4 on desktop. Each card shows title, book, servings, key ingredients. Tap to expand.</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Card Grid</h3>
+      <p>Browse recipes as visual cards in a responsive grid. Dense on desktop, stacks on mobile. Good for browsing and discovery.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">B: List-based (Library-style)</div>
+        <div class="mockup-body">
+          <div style="margin-top:8px">
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e5e7eb">
+              <div>
+                <div style="font-weight:600;font-size:11px">Chocolate Cake</div>
+                <div style="font-size:9px;color:#6b7280">Desserts & Baking · Serves 8 · p.42</div>
+              </div>
+              <div style="font-size:16px">🔖</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e5e7eb">
+              <div>
+                <div style="font-weight:600;font-size:11px">Beef Stew</div>
+                <div style="font-size:9px;color:#6b7280">Soups & Stews · Serves 6 · p.18</div>
+              </div>
+              <div style="font-size:16px">☑</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e5e7eb">
+              <div>
+                <div style="font-weight:600;font-size:11px">Margherita Pizza</div>
+                <div style="font-size:9px;color:#6b7280">Pasta & Italian · Serves 4 · p.7</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:#6b7280;margin-top:12px">Recipe lists with metadata rows. Each row shows title, book, servings, page. Bookmark/made icons on the right. Cleaner, more text-dense.</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>List Rows</h3>
+      <p>Traditional list view with metadata per row. Compact, scannable, familiar. Action icons (bookmark, made) inline. Better for search results and large libraries.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:24px">
+  <p class="label">Both approaches</p>
+  <p style="font-size:13px;color:#6b7280">Both will use Bootstrap 5 for responsive layout, a sticky mobile nav (hamburger menu on phone), and the same recipe detail page. This is just the browse/search/results layout.</p>
+</div>
