@@ -23,12 +23,12 @@ def client(tmp_data_dir, monkeypatch):
 def test_toggle_bookmark(client):
     r = client.post("/bookmarks", data={"recipe_id": "1"})
     assert r.status_code == 200
-    assert "bg-red-500" in r.text
-    assert "Bookmarked" in r.text
+    assert "btn-danger" in r.text
+    assert "Saved" in r.text
     r = client.post("/bookmarks", data={"recipe_id": "1"})
     assert r.status_code == 200
-    assert "bg-stone-200" in r.text
-    assert "Bookmarked" not in r.text
+    assert "btn-outline-secondary" in r.text
+    assert "Saved" not in r.text
 
 
 def test_delete_bookmark(client):
@@ -44,3 +44,4 @@ def test_bookmarks_page(client):
     r = client.get("/bookmarks")
     assert r.status_code == 200
     assert "Cake" in r.text
+    assert "card" in r.text.lower()

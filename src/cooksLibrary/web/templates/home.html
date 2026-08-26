@@ -1,16 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
-<h1 class="text-3xl font-bold mb-6">Cook's Library</h1>
-<form action="/search" method="get" class="mb-8">
-    <input type="text" name="q" placeholder="Search recipes..."
-           class="w-full p-3 rounded border border-stone-300">
-</form>
-<div class="grid grid-cols-2 gap-4">
-    <a href="/books" class="p-6 bg-white rounded shadow hover:shadow-md">
-        <h2 class="text-xl font-bold">Browse Books</h2>
-    </a>
-    <a href="/ingredients" class="p-6 bg-white rounded shadow hover:shadow-md">
-        <h2 class="text-xl font-bold">Browse Ingredients</h2>
-    </a>
+<div class="mb-4">
+    <form action="/search" method="get">
+        <div class="input-group input-group-lg">
+            <input type="text" name="q" class="form-control" placeholder="Search recipes...">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </form>
+</div>
+<div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6">
+        <a href="/books" class="text-decoration-none">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">📚 Browse Books</h3>
+                    <p class="card-text text-muted">Explore by cookbook</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-12 col-sm-6">
+        <a href="/ingredients" class="text-decoration-none">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">🥕 Browse Ingredients</h3>
+                    <p class="card-text text-muted">Find by what you have</p>
+                </div>
+            </div>
+        </a>
+    </div>
 </div>
 {% endblock %}

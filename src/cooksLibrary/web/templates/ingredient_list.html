@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block title %}Ingredients - Cook's Library{% endblock %}
 {% block content %}
-<h1 class="text-3xl font-bold mb-6">Ingredients</h1>
-<ul class="columns-3 gap-4">
+<h1 class="mb-4">Ingredients</h1>
+<ul class="list-group list-group-flush">
     {% for ing in ingredients %}
-    <li><a href="/ingredients/{{ ing.ingredient_name }}"
-           class="text-blue-600 hover:underline">{{ ing.display_name }}</a>
-        <span class="text-stone-400 text-sm">({{ ing.recipe_count }})</span>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <a href="/ingredients/{{ ing.ingredient_name }}" class="text-decoration-none">{{ ing.display_name }}</a>
+        <span class="badge bg-secondary rounded-pill">{{ ing.recipe_count }}</span>
     </li>
     {% endfor %}
 </ul>

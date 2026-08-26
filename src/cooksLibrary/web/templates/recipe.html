@@ -1,40 +1,44 @@
 {% extends "base.html" %}
 {% block title %}{{ recipe.title }} - Cook's Library{% endblock %}
 {% block content %}
-<a href="/books/{{ book.slug }}" class="text-stone-500">&larr; {{ book.title }}</a>
-<div class="flex items-start justify-between mt-2 mb-4">
-    <div>
-        <h1 class="text-3xl font-bold">{{ recipe.title }}</h1>
-        <p class="text-stone-500">{{ book.title }} · p.{{ recipe.page_start }} · Serves {{ recipe.servings }}</p>
-    </div>
-    {% include "partials/bookmark_button.html" %}
-</div>
-{% if recipe.description %}
-<p class="text-stone-600 mb-6">{{ recipe.description }}</p>
-{% endif %}
-<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <div>
-        <h2 class="text-xl font-bold mb-3">Ingredients</h2>
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+        <a href="/books/{{ book.slug }}" class="text-muted text-decoration-none">&larr; {{ book.title }}</a>
+        <div class="d-flex justify-content-between align-items-start mt-2 mb-3">
+            <div>
+                <h1>{{ recipe.title }}</h1>
+                <p class="text-muted">{{ book.title }} · p.{{ recipe.page_start }} · Serves {{ recipe.servings or '?' }}</p>
+            </div>
+            <div class="d-flex gap-2">
+                {% include "partials/bookmark_button.html" %}
+                {% include "partials/made_button.html" %}
+            </div>
+        </div>
+        {% if recipe.description %}
+        <p class="text-secondary mb-4">{{ recipe.description }}</p>
+        {% endif %}
+        <h2 class="h5 mt-4 mb-2">Ingredients</h2>
         {% set sections = {} %}
         {% for ing in recipe.ingredients %}
             {% set _ = sections.update({ing.section: sections.get(ing.section, []) + [ing]}) %}
         {% endfor %}
         {% for section, ings in sections.items() %}
-            {% if section %}<h3 class="font-semibold mt-4 mb-2">{{ section }}</h3>{% endif %}
-            <ul class="space-y-1">
+            {% if section %}<h3 class="h6 mt-3 mb-1">{{ section }}</h3>{% endif %}
+            <div class="mb-3">
                 {% for ing in ings %}
-                <li>{{ ing.raw_text }}</li>
+                <div class="form-check recipe-ingredient">
+                    <input class="form-check-input" type="checkbox" id="ing-{{ ing.id }}">
+                    <label class="form-check-label" for="ing-{{ ing.id }}">{{ ing.raw_text }}</label>
+                </div>
                 {% endfor %}
-            </ul>
+            </div>
         {% endfor %}
-    </div>
-    <div>
-        <h2 class="text-xl font-bold mb-3">Instructions</h2>
-        <p class="whitespace-pre-line">{{ recipe.instructions }}</p>
+        <h2 class="h5 mt-4 mb-2">Instructions</h2>
+        <p class="text-body" style="white-space: pre-line;">{{ recipe.instructions }}</p>
+        <p class="mt-4">
+            <a href="/books/{{ book.slug }}/page/{{ recipe.page_start }}" target="_blank"
+               class="link-primary">View original PDF page</a>
+        </p>
     </div>
 </div>
-<p class="mt-8">
-    <a href="/books/{{ book.slug }}/page/{{ recipe.page_start }}" target="_blank"
-       class="text-blue-600 hover:underline">View original PDF page</a>
-</p>
 {% endblock %}

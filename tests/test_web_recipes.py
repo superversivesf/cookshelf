@@ -33,6 +33,8 @@ def test_recipe_view_structured(client):
     assert "Test Cake" in r.text
     assert "flour" in r.text
     assert "Mix and bake." in r.text
+    assert "Mark as Made" in r.text
+    assert "type=\"checkbox\"" in r.text or 'type="checkbox"' in r.text
 
 
 def test_recipe_view_404(client):

@@ -60,6 +60,12 @@ CREATE TABLE IF NOT EXISTS bookmarks (
     note TEXT
 );
 
+CREATE TABLE IF NOT EXISTS made_recipes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    recipe_id INTEGER NOT NULL UNIQUE REFERENCES recipes(id),
+    made_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 CREATE VIRTUAL TABLE IF NOT EXISTS recipes_fts USING fts5(
     title, description, instructions, ingredient_names
 );

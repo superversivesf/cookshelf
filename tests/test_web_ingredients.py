@@ -25,6 +25,7 @@ def test_ingredient_list(client):
     r = client.get("/ingredients")
     assert r.status_code == 200
     assert "Flour" in r.text
+    assert "list-group" in r.text.lower()
 
 def test_ingredient_detail(client):
     r = client.get("/ingredients/flour")
