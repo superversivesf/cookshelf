@@ -66,7 +66,12 @@ def test_made_page_empty(client):
 def test_toggle_made_via_post(client):
     r = client.post("/made", data={"recipe_id": "1"})
     assert r.status_code == 200
-    assert "Made" in r.text
+    assert "btn-success" in r.text
+    assert "✓ Made" in r.text
+    r = client.post("/made", data={"recipe_id": "1"})
+    assert r.status_code == 200
+    assert "btn-outline-secondary" in r.text
+    assert "Mark as Made" in r.text
 
 def test_made_page_shows_recipe(client):
     client.post("/made", data={"recipe_id": "1"})
@@ -80,3 +85,9 @@ def test_delete_made(client):
     assert r.status_code == 204
     r = client.get("/made")
     assert "Cake" not in r.text
+
+def test_delete_made_idempotent(client):
+    r = client.delete("/made/1")
+    assert r.status_code == 204
+    r2 = client.get("/made")
+    assert "Cake" not in r2.text

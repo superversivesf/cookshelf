@@ -27,5 +27,5 @@ def toggle_made(request: Request, recipe_id: int = Form(...)):
 
 @router.delete("/made/{recipe_id}")
 def remove_made(recipe_id: int):
-    queries.toggle_made(recipe_id)
+    queries.remove_made(recipe_id)
     return Response(status_code=204)

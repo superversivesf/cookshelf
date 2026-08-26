@@ -58,7 +58,7 @@ def _sanitize_fts_query(q: str) -> str:
 def get_bookmarks() -> list[dict]:
     conn = get_db()
     return [dict(r) for r in conn.execute("""
-        SELECT r.id, r.title, b.slug AS book_slug, b.title AS book_title, bm.created_at
+        SELECT r.id, r.title, r.page_start, b.slug AS book_slug, b.title AS book_title, bm.created_at
         FROM bookmarks bm
         JOIN recipes r ON r.id = bm.recipe_id
         JOIN books b ON b.id = r.book_id
@@ -90,6 +90,11 @@ def toggle_made(recipe_id: int) -> bool:
     conn.execute("INSERT INTO made_recipes (recipe_id) VALUES (?)", (recipe_id,))
     conn.commit()
     return True
+
+def remove_made(recipe_id: int) -> None:
+    conn = get_db()
+    conn.execute("DELETE FROM made_recipes WHERE recipe_id = ?", (recipe_id,))
+    conn.commit()
 
 def is_made(recipe_id: int) -> bool:
     conn = get_db()

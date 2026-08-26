@@ -113,6 +113,7 @@ Each card shows: recipe title, book title, servings, bookmark icon, made icon. C
   - "Recent" (sorts by `created_at`/`made_at` DESC)
 - Filters use HTMX — clicking a chip swaps the card grid below without a full page reload.
 - Card grid below the filters, same `recipe_card.html` partial.
+> **Note:** Filter chips are deferred to a follow-up iteration. The pages currently render the full list sorted by date — the filtering can be added without restructuring the templates.
 
 ---
 
