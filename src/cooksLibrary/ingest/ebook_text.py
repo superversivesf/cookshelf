@@ -33,7 +33,7 @@ def extract_ebook_text(ebook_path: str, cache_dir: Path) -> str:
         tmp_txt = tmp.name
     try:
         subprocess.run(
-            ["ebook-convert", ebook_path, tmp_txt, "--txt-no-encoding-hack"],
+            ["ebook-convert", ebook_path, tmp_txt],
             capture_output=True, text=True, check=True
         )
         text = Path(tmp_txt).read_text()
