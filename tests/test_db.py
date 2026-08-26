@@ -16,3 +16,10 @@ def test_migrate_is_idempotent(tmp_db):
         "SELECT name FROM sqlite_master WHERE type='table'"
     ).fetchall()}
     assert "books" in tables
+
+def test_migrate_creates_made_recipes_table(tmp_db):
+    migrate(tmp_db)
+    tables = {row["name"] for row in tmp_db.execute(
+        "SELECT name FROM sqlite_master WHERE type='table'"
+    ).fetchall()}
+    assert "made_recipes" in tables
