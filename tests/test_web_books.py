@@ -44,6 +44,7 @@ def test_book_list(populated_client):
     assert r.status_code == 200
     assert "Test Book" in r.text
     assert "Desserts &amp; Baking" in r.text
+    assert "card" in r.text.lower()
 
 def test_book_detail(populated_client):
     r = populated_client.get("/books/test-book")

@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 {% block title %}{{ book.title }} - Cook's Library{% endblock %}
 {% block content %}
-<a href="/books" class="text-stone-500">&larr; All Books</a>
-<h1 class="text-3xl font-bold mt-2 mb-2">{{ book.title }}</h1>
-{% if book.author %}<p class="text-stone-500 mb-1">{{ book.author }}</p>{% endif %}
-<p class="text-stone-500 mb-6">Category: {{ book.category }} · {{ book.page_count }} pages</p>
-<h2 class="text-xl font-bold mb-3">Recipes</h2>
-<ul class="space-y-2">
+<a href="/books" class="text-muted text-decoration-none">&larr; All Books</a>
+<h1 class="mt-2 mb-2">{{ book.title }}</h1>
+{% if book.author %}<p class="text-muted">{{ book.author }}</p>{% endif %}
+<p class="text-muted mb-4">Category: {{ book.category }} · {{ book.page_count }} pages</p>
+<h2 class="h4 mb-3">Recipes</h2>
+<ul class="list-group">
     {% for r in recipes %}
-    <li>
-        <a href="/recipes/{{ r.id }}" class="text-blue-600 hover:underline">{{ r.title }}</a>
-        <span class="text-stone-400 text-sm">p.{{ r.page_start }}</span>
+    <li class="list-group-item">
+        <a href="/recipes/{{ r.id }}" class="text-decoration-none">{{ r.title }}</a>
+        <span class="text-muted small">p.{{ r.page_start }}</span>
     </li>
     {% endfor %}
 </ul>

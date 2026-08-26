@@ -24,6 +24,7 @@ def test_search_returns_results(client):
     r = client.get("/search", params={"q": "chocolate"})
     assert r.status_code == 200
     assert "Chocolate Cake" in r.text
+    assert "card" in r.text.lower()
 
 def test_search_empty_query(client):
     r = client.get("/search", params={"q": ""})
