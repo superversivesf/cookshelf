@@ -4,7 +4,7 @@ from pathlib import Path
 from unittest.mock import patch
 from cooksLibrary.ingest.detect import detect_recipes, filter_outline_entries, _detect_page_walk
 
-REAL_PDF = "/mnt/media/Komga/Cooking/Weekend Cooking/eatlikeamanguidetofeedingacrowd.pdf"
+REAL_PDF = "/path/to/cookbooks/Weekend Cooking/eatlikeamanguidetofeedingacrowd.pdf"
 
 pytestmark = pytest.mark.skipif(
     not os.path.exists(REAL_PDF),

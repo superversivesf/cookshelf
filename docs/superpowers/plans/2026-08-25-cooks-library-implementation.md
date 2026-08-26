@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - Python 3.12+, SQLite 3.45+ with FTS5 (verified available on host).
-- Source PDFs at `/mnt/media/Komga/Cooking` mounted read-only at `/library/existing` in container.
+- Source PDFs at `/path/to/your/cookbooks` mounted read-only at `/library/existing` in container.
 - Writable incoming folder at `/library/incoming` for adding new PDFs.
 - Data volume at `/data` holds `cooks.db`, `page_images/`, `text_cache/`, `categories.yml`.
 - No Node.js toolchain — Tailwind via standalone binary.
@@ -395,7 +395,7 @@ import os
 from pathlib import Path
 from cooksLibrary.ingest.pdf_text import extract_page, extract_pages
 
-REAL_PDF = "/mnt/media/Komga/Cooking/Weekend Cooking/eatlikeamanguidetofeedingacrowd.pdf"
+REAL_PDF = "/path/to/your/cookbooks/Weekend Cooking/eatlikeamanguidetofeedingacrowd.pdf"
 
 pytestmark = pytest.mark.skipif(
     not os.path.exists(REAL_PDF),
@@ -428,7 +428,7 @@ import os
 import pytest
 from cooksLibrary.ingest.pdf_info import extract_info
 
-REAL_PDF = "/mnt/media/Komga/Cooking/Weekend Cooking/eatlikeamanguidetofeedingacrowd.pdf"
+REAL_PDF = "/path/to/your/cookbooks/Weekend Cooking/eatlikeamanguidetofeedingacrowd.pdf"
 
 pytestmark = pytest.mark.skipif(
     not os.path.exists(REAL_PDF),
@@ -906,7 +906,7 @@ import pytest
 from pathlib import Path
 from cooksLibrary.ingest.detect import detect_recipes, filter_outline_entries
 
-REAL_PDF = "/mnt/media/Komga/Cooking/Weekend Cooking/eatlikeamanguidetofeedingacrowd.pdf"
+REAL_PDF = "/path/to/your/cookbooks/Weekend Cooking/eatlikeamanguidetofeedingacrowd.pdf"
 
 pytestmark = pytest.mark.skipif(
     not os.path.exists(REAL_PDF),
@@ -1370,7 +1370,7 @@ from pathlib import Path
 from cooksLibrary.ingest.cli import run
 from cooksLibrary.db import connect, migrate
 
-REAL_PDF_DIR = "/mnt/media/Komga/Cooking/Weekend Cooking/eatlikeamanguidetofeedingacrowd.pdf"
+REAL_PDF_DIR = "/path/to/your/cookbooks/Weekend Cooking/eatlikeamanguidetofeedingacrowd.pdf"
 REAL_AVAILABLE = os.path.exists(REAL_PDF_DIR)
 
 import pytest
@@ -2693,7 +2693,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - /mnt/media/Komga/Cooking:/library/existing:ro
+      - /path/to/your/cookbooks:/library/existing:ro
       - ./incoming:/library/incoming
       - cooks-data:/data
     environment:

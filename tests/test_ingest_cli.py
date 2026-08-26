@@ -4,7 +4,7 @@ from pathlib import Path
 from cooksLibrary.ingest.cli import run
 from cooksLibrary.db import connect, migrate
 
-REAL_PDF_DIR = "/mnt/media/Komga/Cooking/Weekend Cooking/eatlikeamanguidetofeedingacrowd.pdf"
+REAL_PDF_DIR = "/path/to/cookbooks/Weekend Cooking/eatlikeamanguidetofeedingacrowd.pdf"
 REAL_AVAILABLE = os.path.exists(REAL_PDF_DIR)
 
 import pytest

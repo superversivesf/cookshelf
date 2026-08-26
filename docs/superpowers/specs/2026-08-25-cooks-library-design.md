@@ -12,7 +12,7 @@ A self-hosted, LAN-accessible web app for browsing, searching, and bookmarking r
 
 ### Goals (v1)
 
-- Ingest ~62 cookbook PDFs (~3.4 GB) located under `/mnt/media/Komga/Cooking` and extract recipes into a searchable store.
+- Ingest ~62 cookbook PDFs (~3.4 GB) located under `/path/to/your/cookbooks` and extract recipes into a searchable store.
 - Browse the library by book and by content-derived category.
 - Full-text search across recipes plus ingredient-based search.
 - View a recipe as clean structured text (title, description, ingredients, instructions, servings) with a link to the original PDF page image.
@@ -515,7 +515,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - /mnt/media/Komga/Cooking:/library/existing:ro
+      - /path/to/your/cookbooks:/library/existing:ro
       - ./incoming:/library/incoming
       - cooks-data:/data
     environment:
@@ -534,7 +534,7 @@ volumes:
 
 ### 8.3 Container mount layout
 
-- `/library/existing` — the existing collection, mounted read-only from the host's `/mnt/media/Komga/Cooking`.
+- `/library/existing` — the existing collection, mounted read-only from the host's `/path/to/your/cookbooks`.
 - `/library/incoming` — writable; drop new PDFs here.
 - `/data` — persisted volume holding `cooks.db`, `page_images/`, `text_cache/`, and `categories.yml`.
 

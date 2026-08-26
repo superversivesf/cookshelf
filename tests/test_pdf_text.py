@@ -3,7 +3,7 @@ import pytest
 from pathlib import Path
 from cooksLibrary.ingest.pdf_text import extract_page, extract_pages
 
-REAL_PDF = "/mnt/media/Komga/Cooking/Weekend Cooking/eatlikeamanguidetofeedingacrowd.pdf"
+REAL_PDF = "/path/to/cookbooks/Weekend Cooking/eatlikeamanguidetofeedingacrowd.pdf"
 
 pytestmark = pytest.mark.skipif(
     not os.path.exists(REAL_PDF),
