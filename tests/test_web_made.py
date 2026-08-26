@@ -1,5 +1,7 @@
 import pytest
+from fastapi.testclient import TestClient
 from cooksLibrary.web.queries import get_db, toggle_made, is_made, get_made_recipes
+from cooksLibrary.web.main import create_app
 from cooksLibrary.db import connect, migrate
 
 
@@ -40,3 +42,41 @@ def test_get_made_recipes_ordered_by_date(db_conn):
     assert made[0]["title"] == "Soup"  # most recent first
     assert made[1]["title"] == "Cake"
     assert "made_at" in made[0]
+
+
+@pytest.fixture
+def client(tmp_data_dir, monkeypatch):
+    get_db.cache_clear()
+    db_path = str(tmp_data_dir / "test.db")
+    monkeypatch.setenv("COOKS_DB_PATH", db_path)
+    monkeypatch.setenv("COOKS_DATA_DIR", str(tmp_data_dir))
+    conn = connect(db_path)
+    migrate(conn)
+    conn.execute("INSERT INTO books (slug, title, source_path, source_hash, page_count) VALUES ('b', 'B', '/t.pdf', 'h', 10)")
+    conn.execute("INSERT INTO recipes (book_id, title, page_start) VALUES (1, 'Cake', 1)")
+    conn.commit()
+    conn.close()
+    return TestClient(create_app())
+
+
+def test_made_page_empty(client):
+    r = client.get("/made")
+    assert r.status_code == 200
+
+def test_toggle_made_via_post(client):
+    r = client.post("/made", data={"recipe_id": "1"})
+    assert r.status_code == 200
+    assert "Made" in r.text
+
+def test_made_page_shows_recipe(client):
+    client.post("/made", data={"recipe_id": "1"})
+    r = client.get("/made")
+    assert r.status_code == 200
+    assert "Cake" in r.text
+
+def test_delete_made(client):
+    client.post("/made", data={"recipe_id": "1"})
+    r = client.delete("/made/1")
+    assert r.status_code == 204
+    r = client.get("/made")
+    assert "Cake" not in r.text

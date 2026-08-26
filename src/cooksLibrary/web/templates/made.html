@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Made - Cook's Library{% endblock %}
+{% block content %}
+<h1 class="mb-4">Made Recipes</h1>
+{% if not made_recipes %}
+<p class="text-muted">No recipes marked as made yet.</p>
+{% endif %}
+<div class="row g-3">
+    {% for r in made_recipes %}
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <a href="/recipes/{{ r.id }}" class="text-decoration-none">
+                    <h5 class="card-title">{{ r.title }}</h5>
+                </a>
+                <p class="card-text small text-muted">{{ r.book_title }} · Serves {{ r.servings or '?' }}</p>
+                <p class="card-text small text-muted">Made {{ r.made_at[:10] if r.made_at else '' }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

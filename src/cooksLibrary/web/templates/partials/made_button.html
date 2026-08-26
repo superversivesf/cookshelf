@@ -1,0 +1,5 @@
+<button hx-post="/made" hx-vals='{"recipe_id": {{ recipe.id }}}'
+        hx-swap="outerHTML"
+        class="btn btn-sm {{ 'btn-success' if made else 'btn-outline-secondary' }}">
+    {{ '✓ Made' if made else 'Mark as Made' }}
+</button>
