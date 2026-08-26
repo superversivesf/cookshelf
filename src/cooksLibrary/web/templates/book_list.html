@@ -10,7 +10,7 @@
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
             <a href="/books/{{ book.slug }}" class="text-decoration-none">
                 <div class="card h-100">
-                    <img src="/books/{{ book.slug }}/page/1" alt="{{ book.title }}" class="card-img-top" style="object-fit: cover; height: 240px; background: #f8f9fa;">
+                    <img src="/books/{{ book.slug }}/page/1" alt="{{ book.title }}" class="card-img-top" style="object-fit: contain; aspect-ratio: 3/4; background: #f8f9fa;">
                     <div class="card-body">
                         <h5 class="card-title text-dark">{{ book.title }}</h5>
                         {% if book.author %}<p class="card-text small text-muted">{{ book.author }}</p>{% endif %}
