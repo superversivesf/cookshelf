@@ -1,16 +1,24 @@
 {% extends "base.html" %}
-{% block title %}Bookmarks - Cook's Library{% endblock %}
+{% block title %}Saved - Cook's Library{% endblock %}
 {% block content %}
-<h1 class="text-3xl font-bold mb-6">Bookmarks</h1>
+<h1 class="mb-4">Saved Recipes</h1>
 {% if not bookmarks %}
-<p class="text-stone-500">No bookmarks yet.</p>
-{% endif %}
-<ul class="space-y-2">
+<p class="text-muted">No saved recipes yet.</p>
+{% else %}
+<div class="row g-3">
     {% for bm in bookmarks %}
-    <li class="p-4 bg-white rounded shadow">
-        <a href="/recipes/{{ bm.id }}" class="font-semibold text-blue-600 hover:underline">{{ bm.title }}</a>
-        <p class="text-sm text-stone-500">{{ bm.book_title }} · p.{{ bm.page_start }} · {{ bm.created_at }}</p>
-    </li>
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <a href="/recipes/{{ bm.id }}" class="text-decoration-none">
+                    <h5 class="card-title text-dark">{{ bm.title }}</h5>
+                </a>
+                <p class="card-text small text-muted">{{ bm.book_title }} · p.{{ bm.page_start }}</p>
+                <p class="card-text small text-muted">Saved {{ bm.created_at[:10] if bm.created_at else '' }}</p>
+            </div>
+        </div>
+    </div>
     {% endfor %}
-</ul>
+</div>
+{% endif %}
 {% endblock %}
