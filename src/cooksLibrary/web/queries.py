@@ -80,6 +80,32 @@ def is_bookmarked(recipe_id: int) -> bool:
     conn = get_db()
     return conn.execute("SELECT 1 FROM bookmarks WHERE recipe_id = ?", (recipe_id,)).fetchone() is not None
 
+def toggle_made(recipe_id: int) -> bool:
+    conn = get_db()
+    existing = conn.execute("SELECT id FROM made_recipes WHERE recipe_id = ?", (recipe_id,)).fetchone()
+    if existing:
+        conn.execute("DELETE FROM made_recipes WHERE recipe_id = ?", (recipe_id,))
+        conn.commit()
+        return False
+    conn.execute("INSERT INTO made_recipes (recipe_id) VALUES (?)", (recipe_id,))
+    conn.commit()
+    return True
+
+def is_made(recipe_id: int) -> bool:
+    conn = get_db()
+    return conn.execute("SELECT 1 FROM made_recipes WHERE recipe_id = ?", (recipe_id,)).fetchone() is not None
+
+def get_made_recipes() -> list[dict]:
+    conn = get_db()
+    return [dict(r) for r in conn.execute("""
+        SELECT r.id, r.title, r.page_start, r.servings, b.slug AS book_slug,
+               b.title AS book_title, b.category AS book_category, m.made_at
+        FROM made_recipes m
+        JOIN recipes r ON r.id = m.recipe_id
+        JOIN books b ON b.id = r.book_id
+        ORDER BY m.made_at DESC
+    """).fetchall()]
+
 def get_all_ingredients() -> list[dict]:
     conn = get_db()
     return [dict(r) for r in conn.execute(
