@@ -36,6 +36,8 @@ def test_home_returns_html(client):
     r = client.get("/")
     assert r.status_code == 200
     assert "<html" in r.text.lower()
+    assert "bootstrap" in r.text.lower()
+    assert "navbar" in r.text.lower()
 
 def test_book_list(populated_client):
     r = populated_client.get("/books")
