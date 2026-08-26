@@ -95,7 +95,7 @@ def _ingest_book(conn, book, categories, settings, threshold, force):
         score, notes = score_recipe({**sectioned, "title": rec["title"]})
         needs_review = 1 if score < threshold else 0
         render_method = "pdf_fallback" if needs_review else "structured"
-        conn.execute("""
+        cursor = conn.execute("""
             INSERT OR IGNORE INTO recipes (book_id, title, page_start, page_end, description,
                                 servings, servings_min, servings_max, instructions,
                                 confidence, needs_review, render_method, extraction_notes)
@@ -105,6 +105,8 @@ def _ingest_book(conn, book, categories, settings, threshold, force):
               sectioned["description"], sectioned["servings"],
               sectioned["servings_min"], sectioned["servings_max"],
               sectioned["instructions"], score, needs_review, render_method, notes))
+        if cursor.rowcount == 0:
+            continue
         recipe_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
         for pos, ing in enumerate(sectioned["ingredients"]):
             parsed = ing.get("parsed", {})
