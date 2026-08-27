@@ -12,7 +12,7 @@ from .detect import detect_recipes
 from .section import section_recipe
 from .confidence import score_recipe
 from .index import rebuild_fts, rebuild_ingredient_index
-from .ebook_text import extract_ebook_text
+from .ebook_text import extract_ebook_text, extract_ebook_cover
 
 def run(args: list[str]) -> int:
     parser = argparse.ArgumentParser(prog="cooksLibrary.ingest")
@@ -128,6 +128,7 @@ def _ingest_ebook(conn, book, categories, settings, threshold):
     """Ingest a MOBI/EPUB ebook — extract full text and split into recipes."""
     ebook_path = book["source_path"]
     cache_dir = Path(settings.data_dir)
+    extract_ebook_cover(ebook_path, book["slug"], cache_dir)
     full_text = extract_ebook_text(ebook_path, cache_dir)
 
     early_text = full_text[:2000]

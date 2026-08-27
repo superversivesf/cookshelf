@@ -22,6 +22,32 @@ def extract_ebook_info(ebook_path: str) -> dict:
     return info
 
 
+def extract_ebook_cover(ebook_path: str, slug: str, data_dir: Path) -> bool:
+    """Extract cover image from ebook and save as webp. Returns True on success."""
+    cover_path = data_dir / "page_images" / slug / "0001.webp"
+    cover_path.parent.mkdir(parents=True, exist_ok=True)
+    if cover_path.exists():
+        return True
+    with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
+        tmp_jpg = tmp.name
+    try:
+        result = subprocess.run(
+            ["ebook-meta", f"--get-cover={tmp_jpg}", ebook_path],
+            capture_output=True, text=True, check=True
+        )
+        if not Path(tmp_jpg).exists() or Path(tmp_jpg).stat().st_size == 0:
+            return False
+        subprocess.run(
+            ["cwebp", "-quiet", tmp_jpg, "-o", str(cover_path)],
+            check=True, capture_output=True
+        )
+        return True
+    except Exception:
+        return False
+    finally:
+        Path(tmp_jpg).unlink(missing_ok=True)
+
+
 def extract_ebook_text(ebook_path: str, cache_dir: Path) -> str:
     """Extract full text from a MOBI/EPUB file using ebook-convert."""
     slug = Path(ebook_path).stem
