@@ -40,7 +40,12 @@
                     {% if section %}<h3 class="h6 mt-3 mb-1">{{ section }}</h3>{% endif %}
                     <div class="mb-3">
                         {% for ing in ings %}
-                        {% set have = pantry_haves and ing.raw_text and ing.raw_text|lower in pantry_haves or pantry_haves and ing.ingredient_name and ing.ingredient_name|lower in pantry_haves %}
+                        {% set have = False %}
+                        {% if pantry_haves %}
+                            {% for name in pantry_haves %}
+                                {% if name in ing.raw_text|lower %}{% set have = True %}{% endif %}
+                            {% endfor %}
+                        {% endif %}
                         <div class="form-check recipe-ingredient">
                             <input class="form-check-input" type="checkbox" id="ing-{{ ing.id }}">
                             <label class="form-check-label {% if have %}text-success{% endif %}" for="ing-{{ ing.id }}">{{ ing.raw_text }}
