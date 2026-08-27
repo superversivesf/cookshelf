@@ -4,10 +4,11 @@
 <a href="/books" class="text-muted text-decoration-none">&larr; All Books</a>
 <div class="row mt-2 mb-4 g-3">
     <div class="col-6 col-md-3 col-lg-2">
-        <div style="aspect-ratio: 3/4; background: #f8f9fa;" class="d-flex align-items-center justify-content-center rounded shadow-sm">
+        <div style="aspect-ratio: 3/4; background: #f8f9fa; overflow: hidden;" class="d-flex align-items-center justify-content-center rounded shadow-sm">
             <img src="/books/{{ book.slug }}/page/1" alt="{{ book.title }}" class="img-fluid rounded shadow-sm" loading="lazy"
+                 onload="this.nextElementSibling.style.display='none'"
                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-            <div style="display:none; aspect-ratio: 3/4; width:100%;" class="d-flex align-items-center justify-content-center text-muted">
+            <div style="display:flex; aspect-ratio: 3/4; width:100%; position:absolute;" class="d-flex align-items-center justify-content-center text-muted">
                 <span class="text-center px-3"><i>{{ book.title[:40] }}</i></span>
             </div>
         </div>
