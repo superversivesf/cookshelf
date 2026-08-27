@@ -66,6 +66,15 @@ CREATE TABLE IF NOT EXISTS made_recipes (
     made_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
+CREATE TABLE IF NOT EXISTS shopping_list (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    recipe_id INTEGER NOT NULL,
+    recipe_title TEXT NOT NULL,
+    ingredient_text TEXT NOT NULL,
+    checked INTEGER NOT NULL DEFAULT 0,
+    added_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 CREATE VIRTUAL TABLE IF NOT EXISTS recipes_fts USING fts5(
     title, description, instructions, ingredient_names
 );

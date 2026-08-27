@@ -1,0 +1,7 @@
+{% if not items %}
+<p class="text-muted">Your shopping list is empty. Add ingredients from any recipe.</p>
+{% else %}
+{% for item in items %}
+{% include "partials/shopping_list_row.html" %}
+{% endfor %}
+{% endif %}

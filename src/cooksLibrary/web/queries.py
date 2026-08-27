@@ -135,3 +135,42 @@ def get_recipes_by_ingredient(name: str) -> list[dict]:
         WHERE LOWER(ri.ingredient_name) = ?
         ORDER BY r.title
     """, (name.lower(),)).fetchall()]
+def add_recipe_to_shopping_list(recipe_id: int) -> dict:
+    conn = get_db()
+    conn.execute("DELETE FROM shopping_list")
+    recipe = conn.execute("SELECT title FROM recipes WHERE id = ?", (recipe_id,)).fetchone()
+    if not recipe:
+        return {"recipe_title": "", "item_count": 0}
+    recipe_title = recipe["title"]
+    rows = conn.execute(
+        "SELECT raw_text FROM recipe_ingredients WHERE recipe_id = ? ORDER BY position",
+        (recipe_id,)
+    ).fetchall()
+    for row in rows:
+        conn.execute(
+            "INSERT INTO shopping_list (recipe_id, recipe_title, ingredient_text) VALUES (?, ?, ?)",
+            (recipe_id, recipe_title, row["raw_text"])
+        )
+    conn.commit()
+    return {"recipe_title": recipe_title, "item_count": len(rows)}
+
+def get_shopping_list() -> list[dict]:
+    conn = get_db()
+    return [dict(r) for r in conn.execute(
+        "SELECT * FROM shopping_list ORDER BY added_at"
+    ).fetchall()]
+
+def toggle_shopping_list_item(item_id: int) -> bool:
+    conn = get_db()
+    row = conn.execute("SELECT checked FROM shopping_list WHERE id = ?", (item_id,)).fetchone()
+    if not row:
+        return False
+    new_state = 0 if row["checked"] else 1
+    conn.execute("UPDATE shopping_list SET checked = ? WHERE id = ?", (new_state, item_id))
+    conn.commit()
+    return bool(new_state)
+
+def clear_shopping_list() -> None:
+    conn = get_db()
+    conn.execute("DELETE FROM shopping_list")
+    conn.commit()

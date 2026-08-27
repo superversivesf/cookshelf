@@ -1,0 +1,7 @@
+{% if on_list %}
+<a href="/shopping" class="btn btn-sm btn-success">On List</a>
+{% else %}
+<form action="/shopping/add/{{ recipe.id }}" method="post" class="d-inline">
+    <button type="submit" class="btn btn-sm btn-outline-primary">Add to List</button>
+</form>
+{% endif %}

@@ -9,6 +9,7 @@ from .routes.ingredients import router as ingredients_router
 from .routes.bookmarks import router as bookmarks_router
 from .routes.made import router as made_router
 from .routes.pages import router as pages_router
+from .routes.shopping import router as shopping_router
 
 
 def create_app() -> FastAPI:
@@ -32,6 +33,7 @@ def create_app() -> FastAPI:
     app.include_router(bookmarks_router)
     app.include_router(made_router)
     app.include_router(pages_router)
+    app.include_router(shopping_router)
     return app
 
 

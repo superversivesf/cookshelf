@@ -1,0 +1,8 @@
+<div class="form-check recipe-ingredient d-flex align-items-center" id="item-{{ item.id }}" style="min-height: 44px;">
+    <input class="form-check-input me-2" type="checkbox" id="check-{{ item.id }}"
+           {% if item.checked %}checked{% endif %}
+           hx-post="/shopping/toggle/{{ item.id }}" hx-swap="outerHTML" hx-target="#item-{{ item.id }}">
+    <label class="form-check-label flex-grow-1 {% if item.checked %}text-decoration-line-through text-muted{% endif %}" for="check-{{ item.id }}">
+        {{ item.ingredient_text }}
+    </label>
+</div>
