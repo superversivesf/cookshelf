@@ -174,3 +174,66 @@ def clear_shopping_list() -> None:
     conn = get_db()
     conn.execute("DELETE FROM shopping_list")
     conn.commit()
+
+def import_pantry(data_dir: str) -> None:
+    """Import pantry-list.json into the database."""
+    import json
+    from pathlib import Path
+    pantry_path = Path(data_dir) / "pantry-list.json"
+    # Also check library paths
+    if not pantry_path.exists():
+        for lib in Path("/library/existing").glob("pantry-list.json"):
+            pantry_path = lib
+            break
+    if not pantry_path.exists():
+        return
+    with open(pantry_path) as f:
+        data = json.load(f)
+    conn = get_db()
+    for item in data.get("ingredients", []):
+        conn.execute(
+            "INSERT OR IGNORE INTO pantry_items (ingredient_name, category) VALUES (?, ?)",
+            (item["name"].lower(), item.get("category", "other"))
+        )
+    conn.commit()
+
+def get_pantry_items() -> list[dict]:
+    conn = get_db()
+    return [dict(r) for r in conn.execute(
+        "SELECT * FROM pantry_items ORDER BY category, ingredient_name"
+    ).fetchall()]
+
+def get_pantry_by_category() -> dict:
+    conn = get_db()
+    items = [dict(r) for r in conn.execute(
+        "SELECT * FROM pantry_items ORDER BY category, ingredient_name"
+    ).fetchall()]
+    by_cat = {}
+    for item in items:
+        by_cat.setdefault(item["category"], []).append(item)
+    return by_cat
+
+def toggle_pantry_item(item_id: int) -> bool:
+    conn = get_db()
+    row = conn.execute("SELECT in_stock FROM pantry_items WHERE id = ?", (item_id,)).fetchone()
+    if not row:
+        return False
+    new_state = 0 if row["in_stock"] else 1
+    conn.execute("UPDATE pantry_items SET in_stock = ? WHERE id = ?", (new_state, item_id))
+    conn.commit()
+    return bool(new_state)
+
+def get_pantry_have_set() -> set[str]:
+    """Return set of ingredient names the user has in stock."""
+    conn = get_db()
+    return {row["ingredient_name"] for row in conn.execute(
+        "SELECT ingredient_name FROM pantry_items WHERE in_stock = 1"
+    ).fetchall()}
+
+def ingredient_in_pantry(ingredient_text: str, have_set: set[str]) -> bool:
+    """Check if any pantry item is a substring of the ingredient text."""
+    text = ingredient_text.lower()
+    for name in have_set:
+        if name in text:
+            return True
+    return False

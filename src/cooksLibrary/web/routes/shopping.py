@@ -13,10 +13,12 @@ def shopping_list(request: Request):
     items = queries.get_shopping_list()
     recipe_title = items[0]["recipe_title"] if items else None
     recipe_id = items[0]["recipe_id"] if items else None
+    pantry_haves = queries.get_pantry_have_set()
     return templates.TemplateResponse(request, "shopping.html", {
         "items": items,
         "recipe_title": recipe_title,
         "recipe_id": recipe_id,
+        "pantry_haves": pantry_haves,
     })
 
 
@@ -35,8 +37,10 @@ def toggle_item(request: Request, item_id: int):
         if it["id"] == item_id:
             item = it
             break
+    pantry_haves = queries.get_pantry_have_set()
     return templates.TemplateResponse(request, "partials/shopping_list_row.html", {
-        "item": item or {"id": item_id, "ingredient_text": "", "checked": checked, "recipe_id": 0, "recipe_title": ""}
+        "item": item or {"id": item_id, "ingredient_text": "", "checked": checked, "recipe_id": 0, "recipe_title": ""},
+        "pantry_haves": pantry_haves,
     })
 
 

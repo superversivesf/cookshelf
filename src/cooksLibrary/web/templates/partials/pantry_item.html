@@ -1,0 +1,10 @@
+<div id="pantry-{{ item.id }}" class="d-flex align-items-center" style="min-height: 36px;">
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="pantry-check-{{ item.id }}"
+               {% if item.in_stock %}checked{% endif %}
+               hx-post="/pantry/toggle/{{ item.id }}" hx-swap="outerHTML" hx-target="#pantry-{{ item.id }}">
+        <label class="form-check-label small {% if item.in_stock %}text-success fw-semibold{% else %}text-muted{% endif %}" for="pantry-check-{{ item.id }}">
+            {{ item.ingredient_name }}
+        </label>
+    </div>
+</div>

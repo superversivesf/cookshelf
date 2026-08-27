@@ -78,3 +78,9 @@ CREATE TABLE IF NOT EXISTS shopping_list (
 CREATE VIRTUAL TABLE IF NOT EXISTS recipes_fts USING fts5(
     title, description, instructions, ingredient_names
 );
+CREATE TABLE IF NOT EXISTS pantry_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ingredient_name TEXT NOT NULL UNIQUE,
+    category TEXT NOT NULL DEFAULT 'other',
+    in_stock INTEGER NOT NULL DEFAULT 0
+);
