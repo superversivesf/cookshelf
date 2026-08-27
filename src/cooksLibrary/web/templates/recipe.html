@@ -23,9 +23,11 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#text-view" type="button">Recipe Text</button>
             </li>
+            {% if not is_ebook %}
             <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pdf-view" type="button">Original Page</button>
             </li>
+            {% endif %}
         </ul>
         <div class="tab-content">
             <div class="tab-pane fade show active" id="text-view" role="tabpanel">
@@ -48,6 +50,7 @@
                 <h2 class="h5 mt-4 mb-2">Instructions</h2>
                 <p class="text-body" style="white-space: pre-line;">{{ recipe.instructions }}</p>
             </div>
+            {% if not is_ebook %}
             <div class="tab-pane fade" id="pdf-view" role="tabpanel">
                 {% if recipe.page_end and recipe.page_end > recipe.page_start %}
                     {% for p in range(recipe.page_start, recipe.page_end + 1) %}
@@ -57,6 +60,7 @@
                 <img src="/books/{{ book.slug }}/page/{{ recipe.page_start }}" alt="Page {{ recipe.page_start }}" class="img-fluid rounded shadow-sm" loading="lazy">
                 {% endif %}
             </div>
+            {% endif %}
         </div>
     </div>
 </div>

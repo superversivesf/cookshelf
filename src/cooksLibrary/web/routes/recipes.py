@@ -26,6 +26,7 @@ def recipe_view(request: Request, recipe_id: int):
     made = queries.is_made(recipe_id)
     shopping_items = queries.get_shopping_list()
     on_list = any(item["recipe_id"] == recipe_id for item in shopping_items)
+    is_ebook = book and book.get("ingest_method") == "ebook"
     template_name = (
         "recipe_fallback.html"
         if recipe["render_method"] == "pdf_fallback"
@@ -34,5 +35,5 @@ def recipe_view(request: Request, recipe_id: int):
     return templates.TemplateResponse(
         request,
         template_name,
-        {"recipe": recipe, "book": book, "bookmarked": bookmarked, "made": made, "on_list": on_list},
+        {"recipe": recipe, "book": book, "bookmarked": bookmarked, "made": made, "on_list": on_list, "is_ebook": is_ebook},
     )
